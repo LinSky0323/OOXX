@@ -89,6 +89,63 @@ function getPlayer(){
 function changePlayer(){
     player+=1;
 }
+function PCMove(player,state){
+const moves=getN(state);
+const score=moves.map(([i,j])=>{
+    const [newState,success]=upState(player,[i,j],state);
+    return comScore(player,0,newState);
+})
+const best=player===p1?Math.max(...score):Math.min(...score);
+const bestIdx=score.indexOf(best);
+const[row,col]=moves[bestIdx];
+return[row,col];
+}
+function comScore(player,times,newState){
+    const winner=checkWin(newState);
+    if(winner===p1){return 10-times};
+    if(winner===p2){return times-10};
+    if(winner==="平手"){return 0};
+
+    const move=getN(newState);
+    const nextPlayer=turnNext(player)
+    const score=move.map(([i,j])=>{
+        const[newStates,success]=upState(nextPlayer,[i,j],newState);
+        return comScore(nextPlayer,times+1,newStates);
+    })
+    if(nextPlayer===p2){
+        return Math.min(...score)
+    }
+    if(nextPlayer===p1){
+        return Math.max(...score)
+    }
+}
+function turnNext(player){
+    if(player==p1){return p2}
+    if(player==p2){return p1};
+}
+function getState(player,moves,state){
+    const states=[];
+    for(const i of moves){
+        const[newState,success]=upState(player,i,state);
+        states.push(newState);
+    }
+    return states;
+}
+
+function getN(state){
+    const moves=[];
+    for(let i=0;i<state.length;i++){
+    const row =state[i];
+    for(let j=0;j<row.length;j++){
+        if(row[j]===n){
+            moves.push([i,j])
+        }
+    }
+    }
+    return moves;S
+}
+
+
 
  module.exports = {
 create,
@@ -99,4 +156,5 @@ p2,
 n,
 getPlayer,
 changePlayer,
+PCMove,
  }

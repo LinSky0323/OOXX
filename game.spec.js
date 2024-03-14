@@ -1,4 +1,4 @@
-const{create,upState,checkWin,p1,p2,n}=require ("./game");
+const{create,upState,checkWin,p1,p2,n,PCMove}=require ("./game");
 
 describe("upState",()=>{
     test("ok",()=>{
@@ -52,4 +52,21 @@ describe("checkWin",()=>{
         expect(checkWin([[p1,p2,p1],[p2,p1,p2],[p2,p1,p2]])).toBe("平手");
     });
 
+})
+describe("PCMove",()=>{
+    test("winmove1",()=>{
+        const state=[[p1,p2,n],[p1,p2,n],[n,n,n]];
+        const move=PCMove(p1,state);
+        expect(move).toEqual[2,0];
+    });
+    test("winmove2",()=>{
+        const state=[[p1,p1,n],[p2,p2,n],[n,n,n]];
+        const move=PCMove(p1,state);
+        expect(move).toEqual[0,2];
+    });
+    test("winmove3",()=>{
+        const state=[[p1,n,p2],[n,p1,n],[n,n,n]];
+        const move=PCMove(p2,state);
+        expect(move).toEqual[2,2];
+    });
 })
